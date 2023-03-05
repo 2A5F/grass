@@ -1,5 +1,3 @@
-# koishi-plugin-grass
+# 生草 Bot
 
-[![npm](https://img.shields.io/npm/v/koishi-plugin-grass?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-grass)
-
-生草bot
+[![npm](https://img.shields.io/npm/v/@makegrass/koishi-plugin-grass?style=flat-square)](https://www.npmjs.com/package/@makegrass/koishi-plugin-grass)
