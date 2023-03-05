@@ -1,7 +1,7 @@
 {
   "name": "@makegrass/koishi-plugin-grass",
   "description": "生草bot",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -15,9 +15,10 @@
     "koishi",
     "plugin"
   ],
+  "koishi": {},
   "peerDependencies": {
-    "@koishijs/plugin-adapter-onebot": "^5.6.1",
     "koishi": "^4.11.9",
+    "@koishijs/plugin-adapter-onebot": "^5.6.1",
     "koishi-plugin-gocqhttp": "^3.3.4"
   }
 }
