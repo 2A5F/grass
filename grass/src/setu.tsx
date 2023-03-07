@@ -57,14 +57,14 @@ export function setu(ctx: Context, config: Config) {
       else if (num > 20) return session.text('.need-le20')
 
       // map r18
-
-      if (r18 == 'false' || r18 == '0') r18 = 0
+      if (session.platform == 'onebot') r18 = 0
+      else if (r18 == 'false' || r18 == '0') r18 = 0
       else if (r18 == 'mixed' || r18 == 'mix' || r18 == 'm' || r18 == '2') r18 = 2
       else r18 = 1
 
       if (session.platform == 'onebot' && r18 != 0) {
         r18 = 0
-        session.send(session.text('no-setu'))
+        session.send(session.text('.no-setu'))
       }
 
       try {
@@ -75,6 +75,10 @@ export function setu(ctx: Context, config: Config) {
         if (r.error) {
           session.send(session.text('.err'))
           session.send(r.error)
+          return
+        } else if (r.data == null || r.data.length <= 0) {
+          session.send(session.text('.notfound'))
+          return
         } else {
           if (session.platform == 'onebot') {
             const msg = (

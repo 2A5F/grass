@@ -11,4 +11,9 @@ commands:
       need-gt0: 数量必须大于 0
       need-le20: 数量必须小于 20
       no-setu: 不准涩
+      notfound: |-
+        <random>
+          <>没能找到涩图</>
+          <>你的 xp 太怪了，涩图都没有</>
+        </random>
       err: 没涩成
