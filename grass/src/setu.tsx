@@ -80,19 +80,30 @@ export function setu(ctx: Context, config: Config) {
           session.send(session.text('.notfound'))
           return
         } else {
-          const msg = (
-            <figure>
-              {seq(r.data)
-                .map(s => (
-                  <message user-id={session.userId} nickname={session.author?.nickname || session.username} avatar={session.author?.avatar}>
-                    <author user-id={session.userId} nickname={session.author?.nickname || session.username} avatar={session.author?.avatar}></author>
-                    <image url={s.urls.original}></image>
-                  </message>
-                ))
-                .toArray()}
-            </figure>
-          )
-          session.send(msg)
+          if (session.platform == 'onebot') {
+            const msg = (
+              <figure>
+                {seq(r.data)
+                  .map(s => (
+                    <message user-id={session.userId} nickname={session.author?.nickname || session.username} avatar={session.author?.avatar}>
+                      <author user-id={session.userId} nickname={session.author?.nickname || session.username} avatar={session.author?.avatar}></author>
+                      <image url={s.urls.original}></image>
+                    </message>
+                  ))
+                  .toArray()}
+              </figure>
+            )
+            session.send(msg)
+          } else {
+            const msg = (
+              <message>
+                {seq(r.data)
+                  .map(s => <image url={s.urls.original}></image>)
+                  .toArray()}
+              </message>
+            )
+            session.send(msg)
+          }
         }
       } catch (e) {
         session.send(session.text('.err'))
