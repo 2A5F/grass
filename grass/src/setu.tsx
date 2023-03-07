@@ -84,8 +84,8 @@ export function setu(ctx: Context, config: Config) {
             <figure>
               {seq(r.data)
                 .map(s => (
-                  <message user-id={session.userId} nickname={session.author?.nickname || session.username}>
-                    <author user-id={session.userId} nickname={session.author?.nickname || session.username}></author>
+                  <message user-id={session.userId} nickname={session.author?.nickname || session.username} avatar={session.author?.avatar}>
+                    <author user-id={session.userId} nickname={session.author?.nickname || session.username} avatar={session.author?.avatar}></author>
                     <image url={s.urls.original}></image>
                   </message>
                 ))
