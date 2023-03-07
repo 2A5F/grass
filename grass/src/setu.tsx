@@ -1,5 +1,7 @@
 import { Context } from 'koishi'
 import { seq } from 'libsugar'
+import { Config } from './config'
+import { logger } from './logger'
 
 const 图源 = 'https://api.lolicon.app/setu/v2'
 
@@ -43,7 +45,7 @@ type Urls = {
   original: string
 }
 
-export function setu(ctx: Context) {
+export function setu(ctx: Context, config: Config) {
   ctx
     .command('涩图 [...tag]')
     .option('r18', '-r <string>', { fallback: 'mixed' })
@@ -51,29 +53,59 @@ export function setu(ctx: Context) {
     .option('keyword', '-k <string>', {})
     .option('AI', '-A', { fallback: true })
     .action(async ({ session, options: { r18, num, keyword, AI } }, ...tag) => {
+      if (num <= 0) return '数量必须大于 0'
+      else if (num > 20) return '数量必须小于 20'
+
       // map r18
-      if (session.platform == 'onebot') r18 = 0
-      else if (r18 == 'false' || r18 == '0') r18 = 0
+
+      if (r18 == 'false' || r18 == '0') r18 = 0
       else if (r18 == 'mixed' || r18 == 'mix' || r18 == 'm' || r18 == '2') r18 = 2
       else r18 = 1
 
-      const r: SetuRes = await ctx.http('post', 图源, {
-        data: { r18, num, keyword, tag, excludeAI: !AI, size: 'original' },
-      })
-      if (r.error) {
-        session.send(`出错了: ${r.error}`)
-      } else {
-        const msg = seq(r.data)
-          .map(s => (
-            <figure>
-              <message>
-                <author user-id={session.userId} nickname={session.author?.nickname || session.username}></author>
-                <image url={s.urls.original}></image>
-              </message>
-            </figure>
-          ))
-          .toArray()
-        session.send(msg)
+      if (session.platform == 'onebot' && r18 != 0) {
+        r18 = 0
+        session.send('不准涩')
+      }
+
+      try {
+        const r: SetuRes = await ctx.http('post', 图源, {
+          data: { r18, num, keyword, tag, excludeAI: !AI, size: 'original' },
+        })
+        logger.info(`[${session.platform}] 涩图：${JSON.stringify(r)}`)
+        if (r.error) {
+          session.send(`出错了: ${r.error}`)
+        } else {
+          if (session.platform == 'onebot') {
+            const msg = (
+              <figure>
+                {seq(r.data)
+                  .map(s => (
+                    <message user-id={session.userId} nickname={session.author?.nickname || session.username}>
+                      <author user-id={session.userId} nickname={session.author?.nickname || session.username}></author>
+                      <image url={s.urls.original}></image>
+                    </message>
+                  ))
+                  .toArray()}
+              </figure>
+            )
+            session.send(msg)
+          } else {
+            const msg = (
+              <figure>
+                <message user-id={session.userId} nickname={session.author?.nickname || session.username}>
+                  <author user-id={session.userId} nickname={session.author?.nickname || session.username}></author>
+                  {seq(r.data)
+                    .map(s => <image url={s.urls.original}></image>)
+                    .toArray()}
+                </message>
+              </figure>
+            )
+            session.send(msg)
+          }
+        }
+      } catch (e) {
+        session.send('没涩成')
+        throw e
       }
     })
 }
