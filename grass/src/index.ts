@@ -10,6 +10,7 @@ export * from './config'
 export const name = 'grass'
 
 export function apply(ctx: Context, config: Config) {
+  ctx.i18n.define('zh', require('./locales/zh'))
   base(ctx)
   choose(ctx)
   random(ctx)

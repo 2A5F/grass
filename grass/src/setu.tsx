@@ -51,10 +51,10 @@ export function setu(ctx: Context, config: Config) {
     .option('r18', '-r <string>', { fallback: 'mixed' })
     .option('num', '-n <number>', { fallback: 1 })
     .option('keyword', '-k <string>', {})
-    .option('AI', '-A', { fallback: true })
-    .action(async ({ session, options: { r18, num, keyword, AI } }, ...tag) => {
-      if (num <= 0) return '数量必须大于 0'
-      else if (num > 20) return '数量必须小于 20'
+    .option('noAi', '-A', { fallback: true })
+    .action(async ({ session, options: { r18, num, keyword, noAi } }, ...tag) => {
+      if (num <= 0) return session.text('.need-gt0')
+      else if (num > 20) return session.text('.need-le20')
 
       // map r18
 
@@ -64,16 +64,17 @@ export function setu(ctx: Context, config: Config) {
 
       if (session.platform == 'onebot' && r18 != 0) {
         r18 = 0
-        session.send('不准涩')
+        session.send(session.text('no-setu'))
       }
 
       try {
         const r: SetuRes = await ctx.http('post', 图源, {
-          data: { r18, num, keyword, tag, excludeAI: !AI, size: 'original' },
+          data: { r18, num, keyword, tag, excludeAI: noAi, size: 'original' },
         })
-        logger.info(`[${session.platform}] 涩图：${JSON.stringify(r)}`)
+        logger.info(`[涩图][平台 ${session.platform}]：${JSON.stringify(r)}`)
         if (r.error) {
-          session.send(`出错了: ${r.error}`)
+          session.send(session.text('.err'))
+          session.send(r.error)
         } else {
           if (session.platform == 'onebot') {
             const msg = (
@@ -104,7 +105,7 @@ export function setu(ctx: Context, config: Config) {
           }
         }
       } catch (e) {
-        session.send('没涩成')
+        session.send(session.text('.err'))
         throw e
       }
     })
