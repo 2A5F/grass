@@ -80,33 +80,19 @@ export function setu(ctx: Context, config: Config) {
           session.send(session.text('.notfound'))
           return
         } else {
-          if (session.platform == 'onebot') {
-            const msg = (
-              <figure>
-                {seq(r.data)
-                  .map(s => (
-                    <message user-id={session.userId} nickname={session.author?.nickname || session.username}>
-                      <author user-id={session.userId} nickname={session.author?.nickname || session.username}></author>
-                      <image url={s.urls.original}></image>
-                    </message>
-                  ))
-                  .toArray()}
-              </figure>
-            )
-            session.send(msg)
-          } else {
-            const msg = (
-              <figure>
-                <message user-id={session.userId} nickname={session.author?.nickname || session.username}>
-                  <author user-id={session.userId} nickname={session.author?.nickname || session.username}></author>
-                  {seq(r.data)
-                    .map(s => <image url={s.urls.original}></image>)
-                    .toArray()}
-                </message>
-              </figure>
-            )
-            session.send(msg)
-          }
+          const msg = (
+            <figure>
+              {seq(r.data)
+                .map(s => (
+                  <message user-id={session.userId} nickname={session.author?.nickname || session.username}>
+                    <author user-id={session.userId} nickname={session.author?.nickname || session.username}></author>
+                    <image url={s.urls.original}></image>
+                  </message>
+                ))
+                .toArray()}
+            </figure>
+          )
+          session.send(msg)
         }
       } catch (e) {
         session.send(session.text('.err'))
