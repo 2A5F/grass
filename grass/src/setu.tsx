@@ -63,36 +63,17 @@ export function setu(ctx: Context) {
       if (r.error) {
         session.send(`出错了: ${r.error}`)
       } else {
-        if (session.platform == 'onebot') {
-          const onebot = session.onebot!
-          const user = await session.getUser(session.userId)
-          const msgs = seq(r.data)
-            .map(s => ({
-              type: 'node',
-              data: {
-                name: user.name,
-                uin: `${user.id}`,
-                content: [
-                  {
-                    type: 'image',
-                    subType: 0,
-                    file: s.urls.original,
-                    url: s.urls.original,
-                  },
-                ] as any,
-              },
-            }))
-            .toArray()
-          if (session.guildId) {
-            onebot.sendGroupForwardMsgAsync(session.guildId, msgs)
-          } else {
-            onebot.sendPrivateForwardMsgAsync(session.userId, msgs)
-          }
-        } else {
-          for (const s of r.data) {
-            session.send(<image url={s.urls.original}></image>)
-          }
-        }
+        const msg = seq(r.data)
+          .map(s => (
+            <figure>
+              <message>
+                <author user-id={session.userId} nickname={session.author?.nickname || session.username}></author>
+                <image url={s.urls.original}></image>
+              </message>
+            </figure>
+          ))
+          .toArray()
+        session.send(msg)
       }
     })
 }
