@@ -11,10 +11,14 @@ export const name = 'grass'
 
 export function apply(ctx: Context, config: Config) {
   ctx.i18n.define('zh', require('./locales/zh'))
-  base(ctx)
-  choose(ctx)
-  random(ctx)
-  if (config.setu) {
+  base(ctx, config)
+  if (config.enable.choose) {
+    choose(ctx)
+  }
+  if (config.enable.random) {
+    random(ctx)
+  }
+  if (config.enable.setu) {
     setu(ctx, config)
   }
 }

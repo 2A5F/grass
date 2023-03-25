@@ -1,4 +1,22 @@
 commands:
+  怎么选:
+    description: 选择困难症？帮你选
+    example: 怎么选 肯德基 金拱门
+    messages:
+      none: |-
+        <random>
+          <>选尼玛</>
+          <>选空气</>
+        </random>
+      choose: 选
+  随机数:
+    description: 生成随机数（默认生成一个 0 到 99 的随机数)
+    usage: 随机数 [min]..[max] [x数量]
+    example: 随机数 5..10 x3
+    options:
+      float: 输出浮点数
+    messages:
+      usage_err: 用法错误, 用法：随机数 [min]..[max] [x数量]
   涩图:
     description: 随机涩图
     usage: 用法：涩图 [标签...] [选项]

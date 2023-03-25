@@ -4,23 +4,20 @@ import { Seq, seq } from 'libsugar'
 const getRange = /(?<min>\d+)?\.\.(?<max>\d+)?/
 const getCount = /[xX]?(?<n>\d+)/
 
-const 用法 = '随机数 [min]..[max] [x数量]'
-
 export function random(ctx: Context) {
   ctx
-    .command('随机数 [...opt]', '生成随机数（默认生成一个 0 到 99 的随机数)')
-    .usage(用法)
+    .command('随机数 [...opt]')
     .example('随机数 5..10 x3')
     .option('float', '-f')
     .alias('random')
-    .action(({ options }, ...opts) => {
+    .action(({ session, options }, ...opts) => {
       let min = 0,
         max = 99,
         n = 1
       if (opts.length > 0) {
         for (const opt of seq(opts).take(2)) {
           let g = getRange.exec(opt)
-          if ((g != null && ('min' in g.groups || 'max' in g.groups))) {
+          if (g != null && ('min' in g.groups || 'max' in g.groups)) {
             if ('min' in g.groups) {
               min = +g.groups.min
             }
@@ -34,7 +31,7 @@ export function random(ctx: Context) {
             n = +g.groups.n
             continue
           }
-          return `用法错误, ${用法}`
+          return session.text('.usage_err')
         }
       }
       return Seq.range(0, Math.max(Math.floor(n), 1))
