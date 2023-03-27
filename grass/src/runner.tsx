@@ -21,7 +21,7 @@ async function runCode(session: Session<never, never>, rt: string, code: string)
     return
   }
   try {
-    await run(
+    const r = await run(
       {
         runtime: rt,
         code,
@@ -33,6 +33,9 @@ async function runCode(session: Session<never, never>, rt: string, code: string)
         session.send(<code>{err}</code>)
       }
     )
+    if (!r) {
+      session.send('.noret')
+    }
   } catch (e) {
     session.send(<code>{e}</code>)
   }

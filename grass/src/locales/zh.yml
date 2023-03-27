@@ -43,3 +43,4 @@ commands:
     messages:
       no-code: 请输入要运行的代码
       unknow-rt: 未知的运行时
+      noret: 无输出或已超时
