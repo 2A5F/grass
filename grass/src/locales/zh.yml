@@ -35,3 +35,11 @@ commands:
           <>你的 xp 太怪了，涩图都没有</>
         </random>
       err: 没涩成
+  执行:
+    description: 在指定环境上执行代码
+    usage: '缩写 js | node; 运行时: node | node-eval'
+    options:
+      runtime: '要在什么运行时上运行, 运行时: node | node-eval'
+    messages:
+      no-code: 请输入要运行的代码
+      unknow-rt: 未知的运行时
