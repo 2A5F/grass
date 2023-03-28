@@ -1,7 +1,7 @@
 {
   "name": "@makegrass/koishi-plugin-grass",
   "description": "生草bot",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [

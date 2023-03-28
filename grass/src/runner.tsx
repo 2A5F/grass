@@ -34,7 +34,7 @@ async function runCode(session: Session<never, never>, rt: string, code: string)
       }
     )
     if (!r) {
-      session.send('.noret')
+      session.send(session.text('.noret'))
     }
   } catch (e) {
     session.send(<code>{e}</code>)
