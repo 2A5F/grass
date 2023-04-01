@@ -13,6 +13,8 @@ export function runner(ctx: Context, config: Config) {
   }
 }
 
+const ansi_escape = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g
+
 async function runCode(session: Session<never, never>, rt: string, code: string, config: Config) {
   if (!code?.trim()) {
     session.send(session.text('.no-code'))
@@ -37,10 +39,12 @@ async function runCode(session: Session<never, never>, rt: string, code: string,
       },
       msg => {
         logger.info('[执行输出] %s', `${msg}`)
+        msg = msg.replace(ansi_escape, '')
         session.send(msg.trim() == '' ? session.text('.noret') : msg)
       },
       err => {
         logger.error('[执行输出] %s', `${err}`)
+        err = err.replace(ansi_escape, '')
         session.send(err.trim() == '' ? session.text('.noret') : err)
       }
     )
