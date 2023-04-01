@@ -25,7 +25,15 @@ export interface Config {
   }
 }
 
-const RunnerRuntime: Schema<Runtime> = Schema.union([Schema.const('node' as const), Schema.const('node-eval' as const)])
+const RunnerRuntime: Schema<Runtime> = Schema.union([
+  Schema.const('node' as const),
+  Schema.const('node-eval' as const),
+  Schema.const('deno' as const),
+  Schema.const('deno-eval' as const),
+  Schema.const('shell' as const),
+  Schema.const('bash' as const),
+  Schema.const('pwsh' as const),
+])
 
 export const Config: Schema<Config> = Schema.intersect([
   Schema.object({
